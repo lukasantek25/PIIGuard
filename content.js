@@ -1,7 +1,7 @@
-// AnonyMe - content.js
+// PIIGuard - content.js
 // Intercepts Enter key, redacts PII, then submits.
 
-console.log("[AnonyMe] Content script loaded on:", window.location.hostname);
+console.log("[PIIGuard] Content script loaded on:", window.location.hostname);
 
 const INPUT_SELECTORS = [
   "#prompt-textarea",

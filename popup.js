@@ -1,4 +1,4 @@
-// AnonyMe - popup.js
+// PIIGuard - popup.js
 
 const masterToggle = document.getElementById("master-toggle");
 const statusLabel = document.getElementById("status-label");

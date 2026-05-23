@@ -1,13 +1,12 @@
-// AnonyMe - background.js
+// PIIGuard - background.js
 // Service worker. Runs in the background, independent of any tab.
 // Handles communication between the popup and content scripts.
 
-console.log("[AnonyMe] Background service worker started.");
+console.log("[PIIGuard] Background service worker started.");
 
 // --- Listen for messages from popup or content scripts ---
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  console.log("[AnonyMe] Message received:", message);
-
+  console.log("[PIIGuard] Message received:", message);
   if (message.type === "PING") {
     sendResponse({ status: "OK" });
   }
@@ -28,5 +27,5 @@ chrome.runtime.onInstalled.addListener(() => {
       dates:       { detect: false, action: "redact" },
     }
   });
-  console.log("[AnonyMe] Default settings initialised.");
+  console.log("[PIIGuard] Default settings initialised.");
 });

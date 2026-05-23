@@ -1,4 +1,4 @@
-// AnonyMe - detector.js
+// PIIGuard - detector.js
 // Detects PII entities in text using RegEx patterns.
 
 const PATTERNS = {

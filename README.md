@@ -1,12 +1,11 @@
-# AnonyMe 🕶️
+# PIIGuard 🕶️
 
-> Anonymize your text before it reaches any AI tool. Locally. Instantly. Privately.
+> Protect your privacy before your text reaches any AI tool. Locally. Instantly. Privately.
 
 ---
 
-## What is AnonyMe?
-
-AnonyMe is a browser extension that detects and anonymizes sensitive data in your text **before** you paste it into ChatGPT, Claude, Gemini, Copilot, or any other AI tool.
+## What is PIIGuard?
+PIIGuard is a browser extension that detects and anonymizes sensitive data in your text **before** you paste it into ChatGPT, Claude, Gemini, Copilot, or any other AI tool.
 
 It runs entirely on your device. Your data never touches our servers.
 
@@ -16,14 +15,14 @@ It runs entirely on your device. Your data never touches our servers.
 
 Millions of people paste sensitive information into AI tools every day — contracts with real names, emails with salaries, support tickets with customer data. Most don't think twice about it.
 
-AnonyMe sits between you and the AI, quietly cleaning your text before it goes anywhere.
+PIIGuard sits between you and the AI, quietly cleaning your text before it goes anywhere.
 
 ---
 
 ## Project Structure
 
 ```
-anonyme/
+piiguard/
 ├── manifest.json      # Extension config, permissions, entry points
 ├── content.js         # Injected into AI tool pages, intercepts text fields
 ├── detector.js        # RegEx patterns and anonymisation logic
@@ -64,7 +63,7 @@ anonyme/
 
 1. Open `chrome://extensions`
 2. Enable **Developer mode** (top right)
-3. Click **Load unpacked** and select the `anonyme/` folder
+3. Click **Load unpacked** and select the `piiguard/` folder
 4. The extension icon will appear in your toolbar
 
 ---
