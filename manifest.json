@@ -13,9 +13,7 @@
   "host_permissions": [
     "https://chatgpt.com/*",
     "https://chat.openai.com/*",
-    "https://claude.ai/*",
-    "https://gemini.google.com/*",
-    "https://copilot.microsoft.com/*"
+    "https://claude.ai/*"
   ],
 
   "background": {
@@ -27,9 +25,7 @@
       "matches": [
         "https://chatgpt.com/*",
         "https://chat.openai.com/*",
-        "https://claude.ai/*",
-        "https://gemini.google.com/*",
-        "https://copilot.microsoft.com/*"
+        "https://claude.ai/*"
       ],
       "js": ["detector.js", "content.js"],
       "run_at": "document_idle"
