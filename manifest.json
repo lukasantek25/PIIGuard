@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "AnonyMe",
+  "name": "PIIGuard",
   "version": "0.1.0",
-  "description": "Anonymize sensitive data before it reaches any AI tool. Locally. Instantly. Privately.",
+  "description": "Protect your privacy before your text reaches any AI tool. Locally. Instantly.",
 
   "permissions": [
     "storage",
