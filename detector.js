@@ -7,8 +7,9 @@ const PATTERNS = {
     label: "email",
   },
   ibans: {
-    // Allows spaces, double spaces or dashes as separators
-    regex: /\b[A-Z]{2}\d{2}(?:[\s\-]{1,2}?[A-Z0-9]){11,30}\b/g,
+    // Two capital letters + 2 digits + 11-30 alphanumeric chars
+    // Allows no separator, single space, double space, or dash between chars
+    regex: /\b[A-Z]{2}\d{2}(?:[\s\-]{0,2}[A-Z0-9]){11,30}\b/g,
     label: "iban",
   },
   creditCards: {
