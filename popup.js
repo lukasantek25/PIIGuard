@@ -3,34 +3,42 @@
 const masterToggle = document.getElementById("master-toggle");
 const statusLabel = document.getElementById("status-label");
 const rulesSection = document.getElementById("rules-section");
-const emailCheckbox = document.getElementById("rule-emails");
 
-// Load saved settings
+const checkboxes = {
+  emails:      document.getElementById("rule-emails"),
+  creditCards: document.getElementById("rule-creditCards"),
+  ibans:       document.getElementById("rule-ibans"),
+};
+
 chrome.storage.sync.get(["enabled", "rules"], (data) => {
   if (data.enabled !== undefined) {
     masterToggle.checked = data.enabled;
     updateMasterUI(data.enabled);
   }
-  if (data.rules?.emails !== undefined) {
-    emailCheckbox.checked = data.rules.emails.detect;
+  if (data.rules) {
+    for (const [key, checkbox] of Object.entries(checkboxes)) {
+      if (data.rules[key] !== undefined) {
+        checkbox.checked = data.rules[key].detect;
+      }
+    }
   }
 });
 
-// Master toggle
 masterToggle.addEventListener("change", () => {
   const enabled = masterToggle.checked;
   updateMasterUI(enabled);
   chrome.storage.sync.set({ enabled });
 });
 
-// Email checkbox
-emailCheckbox.addEventListener("change", () => {
-  chrome.storage.sync.get("rules", (data) => {
-    const rules = data.rules || {};
-    rules.emails = { detect: emailCheckbox.checked };
-    chrome.storage.sync.set({ rules });
+for (const [key, checkbox] of Object.entries(checkboxes)) {
+  checkbox.addEventListener("change", () => {
+    chrome.storage.sync.get("rules", (data) => {
+      const rules = data.rules || {};
+      rules[key] = { detect: checkbox.checked };
+      chrome.storage.sync.set({ rules });
+    });
   });
-});
+}
 
 function updateMasterUI(enabled) {
   statusLabel.textContent = enabled ? "On" : "Off";

@@ -5,7 +5,6 @@
   <title>PIIGuard</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     body {
       width: 260px;
       font-family: system-ui, sans-serif;
@@ -13,7 +12,6 @@
       color: #1a1a1a;
       background: #fff;
     }
-
     header {
       display: flex;
       align-items: center;
@@ -21,9 +19,7 @@
       padding: 14px 16px;
       border-bottom: 1px solid #ebebeb;
     }
-
     h1 { font-size: 15px; font-weight: 600; }
-
     .toggle-wrap {
       display: flex;
       align-items: center;
@@ -31,7 +27,6 @@
       font-size: 12px;
       color: #666;
     }
-
     .toggle { position: relative; width: 34px; height: 19px; }
     .toggle input { opacity: 0; width: 0; height: 0; }
     .slider {
@@ -47,14 +42,12 @@
     }
     input:checked + .slider { background: #2563eb; }
     input:checked + .slider::before { transform: translateX(15px); }
-
     .rules {
       padding: 12px 16px;
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
-
     .rule-row {
       display: flex;
       align-items: center;
@@ -63,12 +56,18 @@
       color: #333;
       cursor: pointer;
     }
-
     .rule-row input[type="checkbox"] {
       width: 15px; height: 15px; cursor: pointer;
       accent-color: #2563eb;
     }
-
+    .badge {
+      margin-left: auto;
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 10px;
+      background: #f1f5f9;
+      color: #64748b;
+    }
     footer {
       padding: 10px 16px;
       border-top: 1px solid #ebebeb;
@@ -94,6 +93,15 @@
     <label class="rule-row">
       <input type="checkbox" id="rule-emails" checked />
       Email addresses
+    </label>
+    <label class="rule-row">
+      <input type="checkbox" id="rule-creditCards" checked />
+      Credit cards
+    </label>
+    <label class="rule-row">
+      <input type="checkbox" id="rule-ibans" />
+      IBANs
+      <span class="badge">off by default</span>
     </label>
   </div>
 

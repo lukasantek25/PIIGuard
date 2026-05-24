@@ -4,21 +4,20 @@
 console.log("[PIIGuard] Content script loaded on:", window.location.hostname);
 
 const IS_CLAUDE = window.location.hostname === "claude.ai";
-const IS_CHATGPT = window.location.hostname === "chatgpt.com" || window.location.hostname === "chat.openai.com";
 
 const INPUT_SELECTORS = [
-  "#prompt-textarea",                          // ChatGPT
-  "div[contenteditable='true'].ProseMirror",   // Claude specific
-  "div[contenteditable='true']",               // Claude fallback
-  "textarea",                                  // generic fallback
+  "#prompt-textarea",
+  "div[contenteditable='true'].ProseMirror",
+  "div[contenteditable='true']",
+  "textarea",
 ];
 
 const SUBMIT_SELECTORS = [
-  '[data-testid="send-button"]',               // ChatGPT
-  'button[aria-label="Send Message"]',         // Claude (capital M)
-  'button[aria-label="Send message"]',         // Claude variant
-  'button[aria-label="Send"]',                 // generic
-  'button[type="submit"]',                     // fallback
+  '[data-testid="send-button"]',
+  'button[aria-label="Send Message"]',
+  'button[aria-label="Send message"]',
+  'button[aria-label="Send"]',
+  'button[type="submit"]',
 ];
 
 let isRedacting = false;
@@ -39,16 +38,26 @@ function findSubmitButton() {
   return null;
 }
 
+function getFieldText(input) {
+  if (input.isContentEditable) {
+    const clone = input.cloneNode(true);
+    clone.querySelectorAll("br").forEach(br => br.replaceWith("\n"));
+    clone.querySelectorAll("p, div").forEach(block => {
+      block.insertAdjacentText("afterend", "\n");
+    });
+    return clone.innerText.replace(/\n{3,}/g, "\n\n").trimEnd();
+  }
+  return input.value || "";
+}
+
 function setFieldText(input, text) {
   if (input.isContentEditable) {
     input.focus();
-    input.innerText = "";
+    const selection = window.getSelection();
     const range = document.createRange();
-    const sel = window.getSelection();
     range.selectNodeContents(input);
-    range.collapse(false);
-    sel.removeAllRanges();
-    sel.addRange(range);
+    selection.removeAllRanges();
+    selection.addRange(range);
     document.execCommand("insertText", false, text);
   } else {
     const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
@@ -69,7 +78,7 @@ function redactThenSubmit(submitFn) {
     return submitFn();
   }
 
-  const text = input.innerText || input.value || "";
+  const text = getFieldText(input);
   if (!text.trim()) {
     isRedacting = false;
     return submitFn();
@@ -78,8 +87,12 @@ function redactThenSubmit(submitFn) {
   chrome.storage.sync.get(["enabled", "rules"], (data) => {
     if (data.enabled) {
       const cleaned = anonymise(text, data.rules || {});
-      if (cleaned !== text) setFieldText(input, cleaned);
+      if (cleaned !== text) {
+        setFieldText(input, cleaned);
+        console.log("[PIIGuard] Text redacted.");
+      }
     }
+
     setTimeout(() => {
       isRedacting = false;
       submitFn();
@@ -93,7 +106,7 @@ document.addEventListener("keydown", (event) => {
   if (isRedacting) return;
   const input = findInputField();
   if (!input) return;
-  const text = input.innerText || input.value || "";
+  const text = getFieldText(input);
   if (!text.trim()) return;
 
   event.stopImmediatePropagation();
@@ -101,7 +114,6 @@ document.addEventListener("keydown", (event) => {
 
   redactThenSubmit(() => {
     if (IS_CLAUDE) {
-      // Claude needs Enter key dispatched on the input field itself
       input.dispatchEvent(new KeyboardEvent("keydown", {
         key: "Enter", code: "Enter", keyCode: 13,
         bubbles: true, cancelable: true, composed: true,
