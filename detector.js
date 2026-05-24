@@ -3,19 +3,18 @@
 
 const PATTERNS = {
   emails: {
-    regex: /[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/g,
+    regex: /[a-zA-Z0-9._%+\-!#$%&'*+/=?^`{|}~]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/g,
     label: "email",
   },
   ibans: {
-    // Match country code + check digits + BBAN (11-30 chars)
-    // Separators (space or dash) allowed anywhere between characters
-    regex: /\b[A-Z]{2}\d{2}(?:[\s\-]?[A-Z0-9]){11,30}\b/g,
+    // Allows spaces, double spaces or dashes as separators
+    regex: /\b[A-Z]{2}\d{2}(?:[\s\-]{1,2}?[A-Z0-9]){11,30}\b/g,
     label: "iban",
   },
   creditCards: {
     // Visa/Mastercard: 4-4-4-4, Amex: 4-6-5
-    // Separators: space or dash
-    regex: /\b(?:\d{4}[\s\-]\d{4}[\s\-]\d{4}[\s\-]\d{4}|\d{4}[\s\-]\d{6}[\s\-]\d{5})\b/g,
+    // Allows single or double spaces, or dashes as separators
+    regex: /\b(?:\d{4}[\s\-]{1,2}\d{4}[\s\-]{1,2}\d{4}[\s\-]{1,2}\d{4}|\d{4}[\s\-]{1,2}\d{6}[\s\-]{1,2}\d{5})\b/g,
     label: "credit card",
   },
 };
