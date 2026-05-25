@@ -8,7 +8,8 @@ chrome.runtime.onInstalled.addListener(() => {
     rules: {
       emails:      { detect: true },
       creditCards: { detect: true },
-      ibans:       { detect: false },
+      phones:      { detect: true },
+      ibans:       { detect: true },
     }
   });
   console.log("[PIIGuard] Default settings initialised.");

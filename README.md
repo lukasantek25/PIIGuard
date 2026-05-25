@@ -22,11 +22,18 @@ PIIGuard sits between you and the AI, silently cleaning your text before it goes
 
 ## What It Detects
 
+### General
 | Entity | Default | Example |
 |---|---|---|
-| Email addresses | On | `john@example.com` → `[REDACTED]` |
-| Credit cards | On | `4111 1111 1111 1111` → `[REDACTED]` |
-| IBANs | Off | `GB29 NWBK 6016 1331 9268 19` → `[REDACTED]` |
+| Email addresses | On | `john@example.com` → `[EMAIL]` |
+| Credit cards | On | `4111 1111 1111 1111` → `[CREDIT CARD]` |
+| Phone numbers | On | `+43 664 123 4567` → `[PHONE]` |
+| IBANs | On | `GB29 NWBK 6016 1331 9268 19` → `[IBAN]` |
+
+### Coming Soon
+- **Developer** — API keys, Bearer tokens, passwords & credentials
+- **Legal** — passport numbers, national IDs, tax IDs
+- **Medical** — diagnoses, medications, health records
 
 ---
 
@@ -34,7 +41,7 @@ PIIGuard sits between you and the AI, silently cleaning your text before it goes
 
 1. You type or paste text into ChatGPT or Claude
 2. Press Enter or click Send
-3. PIIGuard detects sensitive entities and replaces them with `[REDACTED]`
+3. PIIGuard detects sensitive entities and replaces them with a typed label (e.g. `[EMAIL]`, `[PHONE]`)
 4. The clean text is what the AI sees
 
 Everything happens locally — no server, no API calls, no data collection.
