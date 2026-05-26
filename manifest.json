@@ -26,8 +26,19 @@
         "https://chat.openai.com/*",
         "https://claude.ai/*"
       ],
-      "js": ["detector.js", "content.js"],
+      "js": ["libphonenumber-min.js", "detector.js", "ner.js", "content.js"],
       "run_at": "document_idle"
+    }
+  ],
+
+  "web_accessible_resources": [
+    {
+      "resources": ["transformers.min.js"],
+      "matches": [
+        "https://chatgpt.com/*",
+        "https://chat.openai.com/*",
+        "https://claude.ai/*"
+      ]
     }
   ],
 

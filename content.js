@@ -84,9 +84,9 @@ function redactThenSubmit(submitFn) {
     return submitFn();
   }
 
-  chrome.storage.sync.get(["enabled", "rules"], (data) => {
+  chrome.storage.sync.get(["enabled", "rules"], async (data) => {
     if (data.enabled) {
-      const cleaned = anonymise(text, data.rules || {});
+      const cleaned = await anonymise(text, data.rules || {});
       if (cleaned !== text) {
         setFieldText(input, cleaned);
         console.log("[PIIGuard] Text redacted.");
@@ -129,7 +129,7 @@ document.addEventListener("keydown", (event) => {
 function attachButtonListener() {
   const button = findSubmitButton();
   if (button && !button._piiguardAttached) {
-    button.addEventListener("click", (event) => {
+    const handler = (event) => {
       if (isRedacting) return;
       event.stopImmediatePropagation();
       event.preventDefault();
@@ -137,10 +137,14 @@ function attachButtonListener() {
       redactThenSubmit(() => {
         button._piiguardAttached = false;
         button.removeEventListener("click", button._piiguardHandler, true);
+        button._piiguardHandler = null;
         button.click();
         setTimeout(() => attachButtonListener(), 100);
       });
-    }, true);
+    };
+
+    button._piiguardHandler = handler;
+    button.addEventListener("click", handler, true);
     button._piiguardAttached = true;
     console.log("[PIIGuard] Submit button listener attached.");
   }

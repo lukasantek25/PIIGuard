@@ -5,83 +5,235 @@
   <title>PIIGuard</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
+
     body {
-      width: 260px;
-      font-family: system-ui, sans-serif;
-      font-size: 14px;
-      color: #1a1a1a;
-      background: #fff;
+      width: 300px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 13px;
+      color: #e6edf3;
+      background: #0d1117;
     }
+
+    /* ── Header ── */
     header {
+      padding: 14px 16px 12px;
+      background: #161b22;
+      border-bottom: 1px solid #30363d;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 14px 16px;
-      border-bottom: 1px solid #ebebeb;
+      gap: 10px;
     }
-    h1 { font-size: 15px; font-weight: 600; }
-    .toggle-wrap {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 12px;
-      color: #666;
+
+    .logo { width: 28px; height: 28px; flex-shrink: 0; }
+
+    .brand { flex: 1; }
+    .brand h1 { font-size: 14px; font-weight: 600; color: #e6edf3; letter-spacing: 0.2px; }
+    .brand p  { font-size: 10px; color: #7d8590; margin-top: 1px; }
+
+    /* Master toggle + status pill */
+    .toggle-wrap { display: flex; align-items: center; gap: 7px; }
+
+    .status-pill {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 20px;
+      color: #3fb950;
+      background: rgba(63, 185, 80, 0.12);
+      border: 1px solid rgba(63, 185, 80, 0.3);
+      transition: color 0.2s, background 0.2s, border-color 0.2s;
     }
-    .toggle { position: relative; width: 34px; height: 19px; }
+    .status-pill.off {
+      color: #7d8590;
+      background: rgba(125, 133, 144, 0.1);
+      border-color: rgba(125, 133, 144, 0.2);
+    }
+
+    .toggle { position: relative; width: 34px; height: 19px; flex-shrink: 0; }
     .toggle input { opacity: 0; width: 0; height: 0; }
     .slider {
       position: absolute; inset: 0;
-      background: #ccc; border-radius: 20px; cursor: pointer;
-      transition: background 0.2s;
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
     }
     .slider::before {
-      content: ""; position: absolute;
-      width: 13px; height: 13px; left: 3px; top: 3px;
-      background: white; border-radius: 50%;
+      content: "";
+      position: absolute;
+      width: 13px; height: 13px;
+      left: 2px; top: 2px;
+      background: #7d8590;
+      border-radius: 50%;
+      transition: transform 0.2s, background 0.2s;
+    }
+    input:checked + .slider { background: #2f81f7; border-color: #2f81f7; }
+    input:checked + .slider::before { transform: translateX(15px); background: #fff; }
+
+    /* ── Rules section ── */
+    #rules-section { padding: 8px 10px 6px; display: flex; flex-direction: column; gap: 5px; }
+
+    /* Category card */
+    .category {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .category-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.15s;
+    }
+    .category-header:hover { background: #21262d; }
+
+    .category-header.disabled { cursor: default; opacity: 0.4; }
+    .category-header.disabled:hover { background: transparent; }
+
+    .category-title {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: #8b949e;
+      flex: 1;
+    }
+
+    .category-arrow {
+      font-size: 9px;
+      color: #484f58;
+      display: inline-block;
       transition: transform 0.2s;
     }
-    input:checked + .slider { background: #2563eb; }
-    input:checked + .slider::before { transform: translateX(15px); }
-    .rules {
-      padding: 12px 16px;
+    .category-arrow.open { transform: rotate(180deg); }
+
+    .category-checkbox {
+      width: 13px; height: 13px;
+      cursor: pointer;
+      accent-color: #2f81f7;
+      flex-shrink: 0;
+    }
+
+    /* Rules list */
+    .category-rules {
+      border-top: 1px solid #30363d;
+      padding: 4px 12px 10px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 2px;
     }
+
+    /* Subgroup header row */
+    .subgroup-header {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 0 4px;
+      margin-top: 2px;
+      border-top: 1px solid #21262d;
+    }
+    .subgroup-header:first-child { margin-top: 0; border-top: none; padding-top: 4px; }
+
+    .subgroup-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #6e7681;
+    }
+
+    .subgroup-checkbox {
+      width: 13px; height: 13px;
+      cursor: pointer;
+      accent-color: #2f81f7;
+      flex-shrink: 0;
+    }
+
+    /* Individual rule rows */
     .rule-row {
       display: flex;
       align-items: center;
-      gap: 10px;
-      font-size: 13px;
-      color: #333;
+      gap: 8px;
+      padding: 5px 6px 5px 20px;
+      border-radius: 5px;
+      font-size: 12px;
+      color: #c9d1d9;
       cursor: pointer;
+      transition: background 0.12s;
     }
+    .rule-row:hover { background: #21262d; }
     .rule-row input[type="checkbox"] {
-      width: 15px; height: 15px; cursor: pointer;
-      accent-color: #2563eb;
+      width: 13px; height: 13px;
+      cursor: pointer;
+      accent-color: #2f81f7;
+      flex-shrink: 0;
     }
+
+    /* Coming soon badge */
     .badge {
       margin-left: auto;
-      font-size: 10px;
+      font-size: 9px;
+      font-weight: 500;
       padding: 2px 6px;
       border-radius: 10px;
-      background: #f1f5f9;
-      color: #64748b;
+      background: rgba(47, 129, 247, 0.1);
+      color: #58a6ff;
+      border: 1px solid rgba(47, 129, 247, 0.2);
     }
+
+    /* NER loading badge (inline, next to Personal names) */
+    #ner-badge {
+      display: none;
+      margin-left: auto;
+      font-size: 9px;
+      font-weight: 500;
+      padding: 2px 6px;
+      border-radius: 10px;
+      background: rgba(47, 129, 247, 0.12);
+      color: #58a6ff;
+      border: 1px solid rgba(47, 129, 247, 0.25);
+    }
+
+    /* ── Footer ── */
     footer {
-      padding: 10px 16px;
-      border-top: 1px solid #ebebeb;
-      font-size: 11px;
-      color: #999;
+      padding: 8px 16px 10px;
+      font-size: 10px;
+      color: #6e7681;
       text-align: center;
+      border-top: 1px solid #21262d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
     }
   </style>
 </head>
 <body>
+
   <header>
-    <h1>PIIGuard</h1>
+    <!-- Shield + lock logo -->
+    <svg class="logo" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M14 2L4 6.5V13.5C4 19.2 8.4 24.5 14 26C19.6 24.5 24 19.2 24 13.5V6.5L14 2Z"
+            fill="#1f6feb" fill-opacity="0.3" stroke="#2f81f7" stroke-width="1.5" stroke-linejoin="round"/>
+      <rect x="10.5" y="11" width="7" height="6" rx="1" stroke="#58a6ff" stroke-width="1.2" fill="none"/>
+      <path d="M12 11V9.5C12 8.67 12.67 8 13.5 8H14.5C15.33 8 16 8.67 16 9.5V11"
+            stroke="#58a6ff" stroke-width="1.2" stroke-linecap="round"/>
+      <circle cx="14" cy="14" r="0.8" fill="#58a6ff"/>
+    </svg>
+
+    <div class="brand">
+      <h1>PIIGuard</h1>
+      <p>Privacy protection for AI</p>
+    </div>
+
     <div class="toggle-wrap">
-      <span id="status-label">On</span>
+      <span id="status-label" class="status-pill">On</span>
       <label class="toggle">
         <input type="checkbox" id="master-toggle" checked />
         <span class="slider"></span>
@@ -89,23 +241,101 @@
     </div>
   </header>
 
-  <div class="rules" id="rules-section">
-    <label class="rule-row">
-      <input type="checkbox" id="rule-emails" checked />
-      Email addresses
-    </label>
-    <label class="rule-row">
-      <input type="checkbox" id="rule-creditCards" checked />
-      Credit cards
-    </label>
-    <label class="rule-row">
-      <input type="checkbox" id="rule-ibans" />
-      IBANs
-      <span class="badge">off by default</span>
-    </label>
+  <div id="rules-section">
+
+    <!-- General -->
+    <div class="category">
+      <div class="category-header" id="header-general">
+        <input type="checkbox" class="category-checkbox" id="cat-toggle-general" checked />
+        <span class="category-title">General</span>
+        <span class="category-arrow open" id="arrow-general">▼</span>
+      </div>
+      <div class="category-rules" id="cat-general">
+
+        <div class="subgroup-header">
+          <input type="checkbox" class="subgroup-checkbox" id="sub-toggle-identity" checked />
+          <span class="subgroup-label">Identity</span>
+        </div>
+        <label class="rule-row">
+          <input type="checkbox" id="rule-names" checked />
+          Personal names
+          <span id="ner-badge">Loading…</span>
+        </label>
+
+        <div class="subgroup-header">
+          <input type="checkbox" class="subgroup-checkbox" id="sub-toggle-contact" checked />
+          <span class="subgroup-label">Contact</span>
+        </div>
+        <label class="rule-row">
+          <input type="checkbox" id="rule-emails" checked />
+          Email addresses
+        </label>
+        <label class="rule-row">
+          <input type="checkbox" id="rule-phones" checked />
+          Phone numbers
+        </label>
+
+        <div class="subgroup-header">
+          <input type="checkbox" class="subgroup-checkbox" id="sub-toggle-financial" checked />
+          <span class="subgroup-label">Financial</span>
+        </div>
+        <label class="rule-row">
+          <input type="checkbox" id="rule-ibans" checked />
+          IBANs
+        </label>
+        <label class="rule-row">
+          <input type="checkbox" id="rule-creditCards" checked />
+          Credit cards
+        </label>
+
+      </div>
+    </div>
+
+    <!-- Developer — coming soon -->
+    <div class="category">
+      <div class="category-header disabled">
+        <input type="checkbox" class="category-checkbox" disabled />
+        <span class="category-title">Developer</span>
+        <span class="badge">Coming soon</span>
+      </div>
+    </div>
+
+    <!-- Financial — coming soon -->
+    <div class="category">
+      <div class="category-header disabled">
+        <input type="checkbox" class="category-checkbox" disabled />
+        <span class="category-title">Financial</span>
+        <span class="badge">Coming soon</span>
+      </div>
+    </div>
+
+    <!-- Legal — coming soon -->
+    <div class="category">
+      <div class="category-header disabled">
+        <input type="checkbox" class="category-checkbox" disabled />
+        <span class="category-title">Legal</span>
+        <span class="badge">Coming soon</span>
+      </div>
+    </div>
+
+    <!-- Medical — coming soon -->
+    <div class="category">
+      <div class="category-header disabled">
+        <input type="checkbox" class="category-checkbox" disabled />
+        <span class="category-title">Medical</span>
+        <span class="badge">Coming soon</span>
+      </div>
+    </div>
+
   </div>
 
-  <footer>Running locally — no data leaves your device</footer>
+  <footer>
+    <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+      <path d="M6 1L2 3V6.5C2 9 4 11 6 11.5C8 11 10 9 10 6.5V3L6 1Z"
+            stroke="#6e7681" stroke-width="1.2" stroke-linejoin="round"/>
+    </svg>
+    Running locally — no data leaves your device
+  </footer>
 
   <script src="popup.js"></script>
 </body>
