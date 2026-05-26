@@ -84,9 +84,9 @@ function redactThenSubmit(submitFn) {
     return submitFn();
   }
 
-  chrome.storage.sync.get(["enabled", "rules"], (data) => {
+  chrome.storage.sync.get(["enabled", "rules"], async (data) => {
     if (data.enabled) {
-      const cleaned = anonymise(text, data.rules || {});
+      const cleaned = await anonymise(text, data.rules || {});
       if (cleaned !== text) {
         setFieldText(input, cleaned);
         console.log("[PIIGuard] Text redacted.");

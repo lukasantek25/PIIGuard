@@ -106,7 +106,7 @@ function findPhones(text, rules) {
   return entities;
 }
 
-function anonymise(text, rules) {
+async function anonymise(text, rules) {
   const matched = new Set();
   const entities = [];
 
@@ -146,6 +146,20 @@ function anonymise(text, rules) {
     if (overlaps) continue;
     for (let i = phone.start; i < phone.end; i++) matched.add(i);
     entities.push(phone);
+  }
+
+  // NER — personal names (runs after regex so names inside emails/IBANs are skipped)
+  if (typeof nerDetect === 'function' && rules.names?.detect) {
+    const nerEntities = await nerDetect(text, rules);
+    for (const entity of nerEntities) {
+      let overlaps = false;
+      for (let i = entity.start; i < entity.end; i++) {
+        if (matched.has(i)) { overlaps = true; break; }
+      }
+      if (overlaps) continue;
+      for (let i = entity.start; i < entity.end; i++) matched.add(i);
+      entities.push(entity);
+    }
   }
 
   entities.sort((a, b) => b.start - a.start);

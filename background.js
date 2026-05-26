@@ -10,6 +10,7 @@ chrome.runtime.onInstalled.addListener(() => {
       creditCards: { detect: true },
       phones:      { detect: true },
       ibans:       { detect: true },
+      names:       { detect: true }, // on by default — model downloads in background on first page load
     }
   });
   console.log("[PIIGuard] Default settings initialised.");
